@@ -8,8 +8,7 @@ module.exports = router;
 router.get('/', function(req, res, next){
 
   //real path is /wiki
-  //send fake response
-  res.send('got to GET /wiki/');
+  res.redirect('/');
 });
 
 router.post('/', function(req, res, next){
@@ -24,4 +23,6 @@ router.get('/add', function(req, res, next){
 
   //send fake response
   res.render('addpage');
+
+
 });

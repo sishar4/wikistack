@@ -14,6 +14,15 @@ app.use('/wiki', require('./routes/wiki'));
 //setup static route to public folder
 app.use(express.static('public'));
 
+//SETUP body parser
+var bodyParser = require('body-parser');
+
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }));
+
+// parse application/json
+app.use(bodyParser.json());
+
 //set up swig
 var swig = require('swig');
 // point res.render to the proper directory
@@ -27,7 +36,7 @@ app.engine('html', swig.renderFile);
 swig.setDefaults({cache: false});
 
 
-var port = 3000;
+var port = process.env.PORT || 3000;
 
 app.listen(port, function(){
   console.log('server listening on port '+port);
