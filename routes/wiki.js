@@ -30,24 +30,41 @@ router.get('/', function(req, res, next){
 router.post('/', function(req, res, next){
   //real path is /wiki
 
-  //create new Page
-  var page = new Page({
+  User.findOrCreate({name: req.body.name,email: req.body.email})
+  .then(function(user){
 
-    title: req.body.title,
-    content: req.body.content,
-    status: req.body.status
-  });
+    //create new Page
+    var tags = req.body.tags.split(' ');
 
-  // name: req.body.name,
-  // email: req.body.email,
-  //save to database
-  page.save()
+    var page = new Page({
+
+      title: req.body.title,
+      content: req.body.content,
+      status: req.body.status,
+      tags: tags,
+      user: user._id
+    });
+
+    return page.save();
+  })
   .then(function(savedPage){
     res.redirect(savedPage.route);
   },
   function(err){
     console.log(err);
     res.render('error',err);
+  });
+
+});
+
+router.get('/search', function(req, res, next){
+
+  console.log('in search query',req.query.tag);
+  Page.findByTag(req.query.tag)
+  .then(function(pages){
+
+    res.render('search', {pages: pages});
+
   });
 
 });
@@ -67,7 +84,19 @@ router.get('/:urlTitle',function(req, res, next){
 
   Page.findOne({'urlTitle': req.params.urlTitle}).exec()
   .then(function(result){
-    res.render('wikipage',{page: result});
+    res.render('wikipage',{page: result, tags: result.tags});
+  });
+
+});
+
+router.get('/:urlTitle/similar',function(req, res, next){
+
+  Page.findOne({'urlTitle': req.params.urlTitle}).exec()
+  .then(function(result){
+    return Page.findSimilar(result.tags);
+  })
+  .then(function(pages){
+    res.render('search', {pages: pages});
   });
 
 });

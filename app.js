@@ -18,6 +18,10 @@ app.use(express.static('public'));
 
 //set up swig
 var swig = require('swig');
+
+//add URL filter 
+require('./filters')(swig);
+
 // point res.render to the proper directory
 app.set('views', __dirname + '/views');
 // have res.render work with html files

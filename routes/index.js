@@ -11,6 +11,11 @@ module.exports = router;
 router.get('/', function(req,res,next){
 
   console.log('home dir');
-  res.send('hello');
+  res.redirect('/wiki');
 
+});
+
+router.get('/search', function(req, res, next){
+
+  res.render('search');
 });

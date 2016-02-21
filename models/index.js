@@ -15,13 +15,27 @@ var pageSchema = new Schema({
   content: {type: String, required: true},
   date: {type: Date, default: Date.now},
   status: {type: String, enum: statuses},
-  author: {type: mongoose.Schema.Types.ObjectId, ref: 'User'} //reference to User model
+  author: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}, //reference to User model
+  tags: {type: [String]}
 });
 
 //create Virtual for formatting the URL route
 pageSchema.virtual('route').get(function(){
   return '/wiki/' + this.urlTitle;
 });
+
+pageSchema.statics.findByTag = function(tagToSearch){
+
+  return this.find({tags: { $elemMatch: {$eq: tagToSearch} } }).exec();
+
+};
+
+pageSchema.statics.findSimilar = function(tagToSearch){
+
+  return this.find({tags: { $elemMatch: { $in: tagToSearch, $ne: this } } }).exec();
+
+};
+
 
 pageSchema.pre('validate' , function(next){
 
@@ -35,6 +49,23 @@ var userSchema = new Schema({
   name: {type: String, required: true},
   email: {type: String, required: true, unique: true}
 });
+
+userSchema.statics.findOrCreate = function (userSearch){
+  var self = this;
+
+  return this.findOne({email: userSearch.email}).exec()
+  .then(function(userResult){
+
+    if(userResult)
+      return userResult;
+      
+    else return self.create({
+      email: userSearch.email,
+      name: userSearch.name
+    });
+
+  });
+};
 
 //compile the schema into a collection-managing Page model
 var Page = mongoose.model('Page', pageSchema);

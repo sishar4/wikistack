@@ -3,10 +3,13 @@
 {% block content %}
   <h3>Pages</h3>
   <hr>
-  <ul class="list-unstyled">
-    {% for page in pages %}
-        <li><a href='{{ page.route }}'>{{ page.title }}</a></li>
-      {% endfor %}
-
+  {% if pages.length > 0 %}
+    <ul class="list-unstyled">
+      {% for page in pages %}
+          <li>{{ page | pageLink }}</li>
+        {% endfor %}
     </ul>
+    {% else %}
+      There are no pages. Why don't you <a href='/wiki/add'>add one</a>?
+    {% endif %}
 {% endblock %}
