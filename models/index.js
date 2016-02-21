@@ -23,6 +23,14 @@ pageSchema.virtual('route').get(function(){
   return '/wiki/' + this.urlTitle;
 });
 
+pageSchema.pre('validate' , function(next){
+
+  this.urlTitle = generateUrlTitle(this.title);
+
+  next();
+
+});
+
 var userSchema = new Schema({
   name: {type: String, required: true},
   email: {type: String, required: true, unique: true}
@@ -31,6 +39,18 @@ var userSchema = new Schema({
 //compile the schema into a collection-managing Page model
 var Page = mongoose.model('Page', pageSchema);
 var User = mongoose.model('User', userSchema);
+
+
+function generateUrlTitle (title) {
+  if (title) {
+    // Removes all non-alphanumeric characters from title
+    // And make whitespace underscore
+    return title.replace(/\s+/g, '_').replace(/\W/g, '');
+  } else {
+    // Generates random 5 letter string
+    return Math.random().toString(36).substring(2, 7);
+  }
+}
 
 //export models
 module.exports = {
