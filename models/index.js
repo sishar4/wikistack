@@ -18,6 +18,11 @@ var pageSchema = new Schema({
   author: {type: mongoose.Schema.Types.ObjectId, ref: 'User'} //reference to User model
 });
 
+//create Virtual for formatting the URL route
+pageSchema.virtual('route').get(function(){
+  return '/wiki/' + this.urlTitle;
+});
+
 var userSchema = new Schema({
   name: {type: String, required: true},
   email: {type: String, required: true, unique: true}
