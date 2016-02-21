@@ -7,8 +7,11 @@ var morgan = require('morgan');
 //MORGAN
 app.use(morgan('dev'));
 
-//set up router
+//set up routers
 app.use('/', require('./routes'));
+app.use('/wiki', require('./routes/wiki'));
+
+//setup static route to public folder
 app.use(express.static('public'));
 
 //set up swig
