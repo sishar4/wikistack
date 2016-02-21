@@ -13,3 +13,11 @@ router.use(bodyParser.urlencoded({ extended: false }));
 
 // parse application/json
 router.use(bodyParser.json());
+
+//setup routes
+router.get('/', function(req,res,next){
+
+  console.log('home dir');
+  res.send('hello');
+
+});

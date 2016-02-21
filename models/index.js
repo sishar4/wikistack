@@ -7,18 +7,20 @@ var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'mongodb connection error:'));
 
 //Create the schemas for our dB
+var statuses = ['open', 'closed'];
+
 var pageSchema = new Schema({
-  title: String,
-  urlTitle: String,
-  content: String,
+  title: {type: String, required: true},
+  urlTitle: {type: String, required: true},
+  content: {type: String, required: true},
   date: {type: Date, default: Date.now},
-  status: String,
+  status: {type: String, enum: statuses},
   author: {type: mongoose.Schema.Types.ObjectId, ref: 'User'} //reference to User model
 });
 
 var userSchema = new Schema({
-  name: String,
-  email: String
+  name: {type: String, required: true},
+  email: {type: String, required: true, unique: true}
 });
 
 //compile the schema into a collection-managing Page model

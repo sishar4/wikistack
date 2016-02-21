@@ -8,7 +8,7 @@ var morgan = require('morgan');
 app.use(morgan('dev'));
 
 //set up router
-app.use('/users', require('./routes'));
+app.use('/', require('./routes'));
 app.use(express.static('public'));
 
 //set up swig
@@ -22,6 +22,7 @@ app.set('view engine', 'html');
 app.engine('html', swig.renderFile);
 // turn of swig's caching
 swig.setDefaults({cache: false});
+
 
 var port = 3000;
 
