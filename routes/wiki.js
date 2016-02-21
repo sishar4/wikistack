@@ -42,7 +42,7 @@ router.post('/', function(req, res, next){
       content: req.body.content,
       status: req.body.status,
       tags: tags,
-      user: user._id
+      author: user._id
     });
 
     return page.save();

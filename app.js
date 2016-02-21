@@ -10,6 +10,7 @@ app.use(morgan('dev'));
 //set up routers
 app.use('/', require('./routes'));
 app.use('/wiki', require('./routes/wiki'));
+app.use('/users', require('./routes/users'));
 
 //setup static route to public folder
 app.use(express.static('public'));
@@ -19,7 +20,7 @@ app.use(express.static('public'));
 //set up swig
 var swig = require('swig');
 
-//add URL filter 
+//add URL filter
 require('./filters')(swig);
 
 // point res.render to the proper directory
